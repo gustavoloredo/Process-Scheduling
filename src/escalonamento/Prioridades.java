@@ -1,43 +1,52 @@
 package escalonamento;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import processo.Processo;
 
-class Prioridades implements AlgoritmoEscalonamento{
+public class Prioridades implements AlgoritmoEscalonamento{
+
+	private List<Processo> listaProcessos = new ArrayList<Processo>();
 
 	@Override
 	public void adicionaProcesso(Processo processo) {
-		// TODO Auto-generated method stub
+		listaProcessos.add(processo);
 		
 	}
 
 	@Override
 	public Processo escalonaProcesso() {
-		// TODO Auto-generated method stub
-		return null;
+		return listaProcessos.remove(0);		
 	}
 
 	@Override
 	public void trocaProcessoExecucao() {
-		// TODO Auto-generated method stub
+		// Fifo nao troca processo em execucao
 		
 	}
 
 	@Override
 	public boolean filaVazia() {
-		// TODO Auto-generated method stub
-		return false;
+		return listaProcessos.isEmpty();
 	}
 
 	@Override
 	public void imprimeEstadoFila() {
-		// TODO Auto-generated method stub
+		System.out.println("Lista de Processos Prontos");
+		System.out.println("--------------------------");
+		for (Processo processo : listaProcessos) {
+			processo.imprime();
+		}
+		System.out.println("--------------------------");
 		
 	}
 
 	@Override
 	public void incrementaTempoEspera() {
-		// TODO Auto-generated method stub
-		
+		for (Processo processo : listaProcessos) {
+			processo.setTempoEspera(processo.getTempoEspera() + 1);
+		}		
 	}
 
 }

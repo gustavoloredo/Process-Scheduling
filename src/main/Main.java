@@ -6,7 +6,11 @@ import java.util.List;
 import java.util.Scanner;
 
 import escalonamento.AlgoritmoEscalonamento;
+import escalonamento.Circular;
+import escalonamento.CircularPrioridades;
 import escalonamento.FIFO;
+import escalonamento.SJF;
+import escalonamento.Prioridades;
 import processo.Processo;
 import util.Estado;
 
@@ -16,32 +20,34 @@ public class Main {
 		
 	public static void main(String [] args) {
 		Scanner scan = new Scanner(System.in);
-		HashMap<Integer, Processo> processos = criaProcessos();
-		AlgoritmoEscalonamento ae;
+		boolean quantum = false;
 		String algoritmo = scan.nextLine();
-		List<Processo> listaProcessosTerminados = new ArrayList<Processo>();
+		AlgoritmoEscalonamento ae;
 		
 		switch(algoritmo) {
 			
 		case "SJF":
-			ae = new FIFO();
+			ae = new SJF();
 			break;
 		case "FIFO":
 			ae = new FIFO();
 			break;
 		case "Circular":
-			ae = new FIFO();
+			ae = new Circular();
+			quantum = true;
 			break;
 		case "Prioridade":
-			ae = new FIFO();
+			ae = new Prioridades();
 			break;
 		case "PrioCircular":
-			ae = new FIFO();
+			ae = new CircularPrioridades();
 			break;
 		default:
 			ae = new FIFO();
 			
 		}
+		HashMap<Integer, Processo> processos = criaProcessos(quantum);
+		List<Processo> listaProcessosTerminados = new ArrayList<Processo>();
 		for (int i = 1; i < 100 ; i++) {
 			
 			if (processos.get(i) != null) {
@@ -94,17 +100,21 @@ public class Main {
 		
 	}
 
-	private static HashMap<Integer, Processo> criaProcessos() {
+	private static HashMap<Integer, Processo> criaProcessos(boolean quantum) {
 		HashMap<Integer, Processo> processos = new HashMap<Integer, Processo>();
 		Processo processo = new Processo();
+		if(quantum) {
+			processo.setTempoEntradaSaida(6);
+		}
 		processo.setNome("P1");
 		processo.setDuracao(10);
 		processo.setPrioridade(10);
 		processo.setEstado(Estado.PRONTO);
 		processo.setTempoInicio(3);		
-//		processo.setTempoEntradaSaida(6);		
 		processos.put(processo.getTempoInicio(), processo);
-		
+		if(quantum) {
+			processo.setTempoEntradaSaida(6);
+		}
 		processo = new Processo();
 		processo.setNome("P2");
 		processo.setDuracao(15);
@@ -112,7 +122,9 @@ public class Main {
 		processo.setEstado(Estado.PRONTO);
 		processo.setTempoInicio(6);		
 		processos.put(processo.getTempoInicio(), processo);
-		
+		if(quantum) {
+			processo.setTempoEntradaSaida(6);
+		}
 		processo = new Processo();
 		processo.setNome("P3");
 		processo.setDuracao(8);
@@ -120,7 +132,9 @@ public class Main {
 		processo.setEstado(Estado.PRONTO);
 		processo.setTempoInicio(15);		
 		processos.put(processo.getTempoInicio(), processo);
-		
+		if(quantum) {
+			processo.setTempoEntradaSaida(6);
+		}
 		processo = new Processo();
 		processo.setNome("P4");
 		processo.setDuracao(20);
@@ -128,7 +142,9 @@ public class Main {
 		processo.setEstado(Estado.PRONTO);
 		processo.setTempoInicio(18);		
 		processos.put(processo.getTempoInicio(), processo);
-		
+		if(quantum) {
+			processo.setTempoEntradaSaida(6);
+		}
 		processo = new Processo();
 		processo.setNome("P5");
 		processo.setDuracao(10);
