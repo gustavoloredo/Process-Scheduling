@@ -64,4 +64,10 @@ public class SJF  implements AlgoritmoEscalonamento {
 		}		
 	}
 
+	@Override
+	public int verificaPrioridade() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 }

@@ -16,4 +16,6 @@ public interface AlgoritmoEscalonamento {
 	
 	public void incrementaTempoEspera();
 
+	public int verificaPrioridade();
+
 }

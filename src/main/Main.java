@@ -21,6 +21,7 @@ public class Main {
 	public static void main(String [] args) {
 		Scanner scan = new Scanner(System.in);
 		boolean quantum = false;
+		int maiorPrioridade = 0;
 		String algoritmo = scan.nextLine();
 		AlgoritmoEscalonamento ae;
 		
@@ -41,6 +42,7 @@ public class Main {
 			break;
 		case "PrioCircular":
 			ae = new CircularPrioridades();
+			quantum = true;
 			break;
 		default:
 			ae = new FIFO();
@@ -65,17 +67,38 @@ public class Main {
 			
 			if (CPU != null) {
 				Processo processo = CPU;
-				processo.setTempoExecucao(processo.getTempoExecucao() + 1);
-				if (processo.getTempoExecucao() == processo.getTempoEntradaSaida()) {
-					CPU = null;
-					System.out.println("##### " + i + "  Processo Entrada/Saída: " + processo.getNome());
-					ae.adicionaProcesso(processo);
+				maiorPrioridade = ae.verificaPrioridade();
+				if(algoritmo == "PrioCircular" || algoritmo == "Prioridade") {
+					maiorPrioridade = ae.verificaPrioridade();
 				}
-				
+				processo.setTempoExecucao(processo.getTempoExecucao() + 1);
+				if(maiorPrioridade == processo.getPrioridade() ) {
+					if (processo.getTempoExecucao() == processo.getTempoEntradaSaida()) {
+						CPU = null;
+						System.out.println("##### " + i + "  Processo Entrada/Saída: " + processo.getNome());
+						ae.adicionaProcesso(processo);
+					}				
+				}
+				if(false){
+					if (processo.getTempoExecucao() == processo.getTempoEntradaSaida() ) {
+						CPU = null;
+						System.out.println("##### " + i + "  Processo Entrada/Saída: " + processo.getNome());
+						ae.adicionaProcesso(processo);
+					}		
+					
+				}
 				if (processo.getDuracao() == processo.getTempoExecucao()) {
 					CPU = null;
 					System.out.println("##### " + i + "  Processo Terminado: " + processo.getNome());
 					listaProcessosTerminados.add(processo);
+				}
+				
+				if(maiorPrioridade > processo.getPrioridade() ) {
+					System.out.println("#### " +i+ " maior prioridade: "+ maiorPrioridade);
+					System.out.println(processo.getPrioridade());
+					CPU = null;
+					System.out.println("##### " + i + "  Processo Entrada/Saída: " + processo.getNome());
+					ae.adicionaProcesso(processo);
 				}
 			}
 			
@@ -95,6 +118,8 @@ public class Main {
 			somaEspera += processo.getTempoEspera();
 		}
 		System.out.println("Tempo Médio: " + (somaEspera / listaProcessosTerminados.size()));
+
+		System.out.println("Tempo Médio: " + (listaProcessosTerminados.size()));
 		
 		
 		
@@ -112,43 +137,47 @@ public class Main {
 		processo.setEstado(Estado.PRONTO);
 		processo.setTempoInicio(3);		
 		processos.put(processo.getTempoInicio(), processo);
+		
+		processo = new Processo();
 		if(quantum) {
 			processo.setTempoEntradaSaida(6);
 		}
-		processo = new Processo();
 		processo.setNome("P2");
 		processo.setDuracao(15);
-		processo.setPrioridade(10);
+		processo.setPrioridade(9);
 		processo.setEstado(Estado.PRONTO);
 		processo.setTempoInicio(6);		
 		processos.put(processo.getTempoInicio(), processo);
+		
+		processo = new Processo();
 		if(quantum) {
 			processo.setTempoEntradaSaida(6);
 		}
-		processo = new Processo();
 		processo.setNome("P3");
 		processo.setDuracao(8);
-		processo.setPrioridade(10);
+		processo.setPrioridade(8);
 		processo.setEstado(Estado.PRONTO);
 		processo.setTempoInicio(15);		
 		processos.put(processo.getTempoInicio(), processo);
+		
+		processo = new Processo();
 		if(quantum) {
 			processo.setTempoEntradaSaida(6);
 		}
-		processo = new Processo();
 		processo.setNome("P4");
 		processo.setDuracao(20);
 		processo.setPrioridade(10);
 		processo.setEstado(Estado.PRONTO);
 		processo.setTempoInicio(18);		
 		processos.put(processo.getTempoInicio(), processo);
+		
+		processo = new Processo();
 		if(quantum) {
 			processo.setTempoEntradaSaida(6);
 		}
-		processo = new Processo();
 		processo.setNome("P5");
 		processo.setDuracao(10);
-		processo.setPrioridade(10);
+		processo.setPrioridade(12);
 		processo.setEstado(Estado.PRONTO);
 		processo.setTempoInicio(22);	
 		processos.put(processo.getTempoInicio(), processo);
