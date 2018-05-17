@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 import escalonamento.AlgoritmoEscalonamento;
@@ -26,10 +27,12 @@ public class Main {
 		boolean quantum = false;
 		int maiorPrioridade = 0;
 		int algoritmo = Integer.MIN_VALUE;
+		HashMap<String,AlgoritmoEscalonamento> aeArray = new HashMap<String,AlgoritmoEscalonamento>();
+		HashMap<String,String> tempo = new HashMap<String,String>();
 		System.out.println("Bem vindo ao simulador de processos! \n"
 				+ "Digite qual metodo de escalonamento deseja selecionar: \n"
-				+ "1 - Fifo\n"
-				+ "2 - SJF\n"
+				+ "1 - SJF\n"
+				+ "2 - Fifo\n"
 				+ "3 - Circular\n"
 				+ "4 - Prioridade\n"
 				+ "5 - Circular com Prioridade\n"
@@ -42,31 +45,33 @@ public class Main {
 			algoritmo = scan.nextInt();
 		}while(algoritmo == Integer.MIN_VALUE);
 		AlgoritmoEscalonamento ae;
-		int counter = 5;
 		switch(algoritmo) {
-			
 		case 1:
-			ae = new SJF();
+			aeArray.put("SJF",new SJF());
 			break;
 		case 2:
-			ae = new FIFO();
+			aeArray.put("FIFO",new FIFO());
 			break;
 		case 3:
-			ae = new Circular();
+			aeArray.put("Circular",new Circular());
 			quantum = true;
 			break;
 		case 4:
-			ae = new Prioridades();
+			aeArray.put("Prioridades",new Prioridades());
 			break;
 		case 5:
-			ae = new CircularPrioridades();
+			aeArray.put("CircularPrioridades",new CircularPrioridades());
 			quantum = true;
 			break;
 		default:
-			ae = new FIFO();
-			counter = 0;
+			aeArray.put("Fifo",new FIFO());
+			aeArray.put("SJF",new SJF());
+			aeArray.put("Circular",new Circular());
+			aeArray.put("Prioridades",new Prioridades());
+			aeArray.put("CircularPrioridades",new CircularPrioridades());
 		}
-		do {
+		for(Map.Entry<String,AlgoritmoEscalonamento> pair : aeArray.entrySet()) {
+			ae = pair.getValue();
 			HashMap<Integer, Processo> processos = criaProcessos(quantum);
 			List<Processo> listaProcessosTerminados = new ArrayList<Processo>();
 			for (int i = 1; i < 100 ; i++) {
@@ -134,11 +139,16 @@ public class Main {
 				System.out.println(processo.getTempoEspera());
 				somaEspera += processo.getTempoEspera();
 			}
-			String tempo = "Tempo Médio: " + (somaEspera / listaProcessosTerminados.size());
-			System.out.println(tempo);
-		}while(counter < 5);
+			tempo.put(pair.getKey(),"Tempo Médio: " + (somaEspera / listaProcessosTerminados.size()));
+		}
+		String temposMedios= "";
+				for(Map.Entry<String,String> pair:tempo.entrySet()) {
+					temposMedios +="Algoritmo: "+ pair.getKey()+ "->"+pair.getValue()+"\n"; 
+				}
+				System.out.println(temposMedios);
+				scan.close();
 		executeInTerminal("clear;"
-				+ " echo "+ tempo);
+				+ " echo -e"+ " '"+temposMedios+ " ' ");
 		
 		
 	}
