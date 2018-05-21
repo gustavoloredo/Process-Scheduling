@@ -18,13 +18,12 @@ public class CircularPrioridades implements AlgoritmoEscalonamento{
 
 	@Override
 	public Processo escalonaProcesso() {
-		 int minInicio = Max, maxPrioridade = Min, i = Min, tira = Min ;
+		 int maxPrioridade = Min, i = Min, tira = Min ;
 
          for (Processo processo : listaProcessos) {
              if(processo.getPrioridade()> maxPrioridade) {
 
                  maxPrioridade = processo.getPrioridade();
-                 minInicio = processo.getTempoInicio();
                  tira = i;
 
              }
